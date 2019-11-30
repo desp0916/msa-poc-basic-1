@@ -1,0 +1,36 @@
+.svn
+*.iml
+.idea
+bower_components
+node_modules
+node
+*.log
+asciidoctor.css
+README.html
+built
+dump.rdb
+.classpath
+.project
+/.settings/
+/target/
+/data/
+.eslintrc
+.eslintrc.json
+
+# testing
+coverage
+
+# production
+build
+dist
+
+# misc
+.DS_Store
+.env
+npm-debug.log
+#src/main/resources/application.yml
+#src/main/resources/logback.xml
+aplogconsole.log
+aplogconsole.log.*
+/.apt_generated/
+.factorypath

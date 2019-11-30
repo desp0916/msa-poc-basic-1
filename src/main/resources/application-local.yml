@@ -1,0 +1,60 @@
+# ===================================================================
+# 開發環境設定檔
+# ===================================================================
+
+# ----------------------------------------
+# CORE PROPERTIES
+# ----------------------------------------
+
+# LOGGING
+# 使用「spring-boot-starter-logging」內建的 logback
+# https://docs.spring.io/spring-boot/docs/current/reference/html/howto-logging.html
+logging:
+# 使用 Spring Boot 預設值（Log 顯示在 Console），所以將以下設定註解掉
+#  path: .
+#  file: app.log
+  level:
+    com.twlife.msa.poc: DEBUG
+#    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+#    org.springframework.data.jpa.repository.query.SpelExpressionStringQueryParameterBinder: OFF
+    org.springframework.security: INFO
+
+# IDENTITY (ContextIdApplicationContextInitializer)
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://127.0.0.1:5432/msa_poc
+    username: msa_poc_mgr
+    password: test123
+    validationQuery: SELECT 1
+# Workaround for docker-compose startup order problems.
+# docker-compose will attempt to start spanners-api before the database
+# is finished initializing. By default, Spring Boot config will fail to
+# start the app. continue-on-error allows it to start and retry later.
+#    continue-on-error: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+ 
+# ----------------------------------------
+# WEB PROPERTIES
+# ----------------------------------------
+
+# EMBEDDED SERVER CONFIGURATION (ServerProperties)
+server:
+  port: 8082
+# contextPath: /web
+# 如果關閉 SSL 以後，無法以 Chrome 登入，請先使用「開發者工具」
+# 中的「Application -> Clear Storage」將全部的相關資料都清
+# 除，包含：Application, Storage, Cache 等。
+#  ssl:
+#    enabled: true
+#    key-store: classpath:keystore.jks
+#    key-store-password: 1qaz@WSX
+#    keyAlias: tomcat

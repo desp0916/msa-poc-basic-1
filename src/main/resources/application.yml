@@ -1,0 +1,36 @@
+# ===================================================================
+# Spring Boot Application 設定檔
+#
+# Spring Boot 完整的 application.properties 可參考：
+# https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+management:
+  endpoint:
+    restart:
+      enabled: true
+    health:
+      enabled: true
+    info:
+      enabled: true
+
+spring:
+  application:
+    name: msa-poc-basic-1
+  profiles:
+    # 使用 mvn fabric8:deploy 部署到 K8S 時，會被 src/main/fabric8/deployment.yml
+    # 裡面的「SPRING_PROFILES_ACTIVE」環境變數取代（目前設為 minikube）
+    active: kubernetes
+  data:
+    rest:
+      base-path: /api
+  messages:
+    # 設置國際化設定檔存放在classpath:/i18n目錄下
+    # basename: i18n/messages
+    # 設置載入資源的緩存失效時間，-1表示永久有效，默認為-1
+    cache-seconds: 3600
+    # 設定message bundles編碼方式，預設為UTF-8
+    #encoding: UTF-8
+  thymeleaf:
+    cache: false
+    mode: HTML

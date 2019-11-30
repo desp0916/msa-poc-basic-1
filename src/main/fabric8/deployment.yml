@@ -1,0 +1,32 @@
+kind: Deployment
+spec:
+  replicas: 1
+  template:
+    spec:
+      volumes:
+      - name: apdata
+        persistentVolumeClaim:
+          claimName: apdata
+      containers:
+      - volumeMounts:
+        - mountPath: /tmp
+          name: apdata
+        env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: "kubernetes"
+          - name: K8S_POSTGRES_DB_HOST
+            value: "postgresql96"
+          - name: K8S_POSTGRES_DB_PORT
+            value: "5432"
+          # https://developers.redhat.com/blog/2017/10/04/configuring-spring-boot-kubernetes-secrets/
+          # !!!注意這裡的縮排!!!
+          - name: K8S_POSTGRES_DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: msa-poc-db-secret
+                key: spring.datasource.username
+          - name: K8S_POSTGRES_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: msa-poc-db-secret
+                key: spring.datasource.password

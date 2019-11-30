@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: msa-poc-basic-1
+  labels:
+    app: msa-poc-basic-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: msa-poc-basic-1
+  template:
+    metadata:
+      labels:
+        app: msa-poc-basic-1
+    spec:
+      containers:
+      - name: msa-poc-basic-1
+        image: msa-poc-basic-1:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "minikube"

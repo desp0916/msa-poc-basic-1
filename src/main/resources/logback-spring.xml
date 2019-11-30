@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+根據 Spring Boot 官方文件（https://docs.spring.io/spring-boot/docs/1.5.7.RELEASE/reference/html/boot-features-logging.html），
+將這個檔案命名為「logback-spring.xml」：
+
+  When possible we recommend that you use the -spring variants for your logging configuration (for example logback-spring.xml 
+  rather than logback.xml). If you use standard configuration locations, Spring cannot completely control log initialization.
+
+請參考 Spring Boot 的 GitHub：https://github.com/spring-projects/spring-boot/tree/master/spring-boot-project/spring-boot/src/main/resources/org/springframework/boot/logging/logback，
+該目錄下有四個檔案：
+
+ 1. defaults.xml: 定義了「CONSOLE_LOG_PATTERN」和「FILE_LOG_PATTERN」與一些 loggers，所以一定要 include 進來。
+ 2. console-appender.xml: 將 log 顯示在 console 的相關設定。
+ 3. file-appender.xml：將 log 寫入檔案的相關設定。
+ 4. base.xml: 定義了 root logger，同時也 include 了「console-appender.xml」和「file-appender.xml]，並為 LOG_FILE 設定了預設值。
+
+因此，依照 Spring Profile 的不同（dev, staging, prod，定義在 application.yml 中的 spring.profiles.active）來套用不同的設定。 
+
+參考文件：
+
+  1. https://www.mkyong.com/logging/logback-xml-example/
+  2. https://docs.spring.io/spring-boot/docs/current/reference/html/howto-logging.html
+  3. https://docs.spring.io/spring-boot/docs/1.5.7.RELEASE/reference/html/boot-features-logging.html#boot-features-logging-file-output
+  4. https://github.com/spring-projects/spring-boot/tree/master/spring-boot/src/main/resources/org/springframework/boot/logging/logback
+  5. https://blog.csdn.net/yueyemoyan/article/details/76059429
+-->
+<configuration>
+
+	<contextName>Log Settings for msa-poc-basic-1</contextName>
+	<property name="CHARSET" value="UTF-8" />
+	<include
+		resource="org/springframework/boot/logging/logback/defaults.xml" />
+	<!-- 注意，如果使用以下 base.xml 這個檔案，root logger（level="INFO"）的「appender-ref」會有 
+		CONSOLE 與 FILE -->
+	<!-- include resource="org/springframework/boot/logging/logback/base.xml" / -->
+
+	<!-- 開發環境（通常在本機 IDE）：將 Log 顯示在 CONSOLE -->
+	<springProfile name="local">
+		<include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+		<root level="INFO">
+			<appender-ref ref="CONSOLE" />
+		</root>
+	</springProfile>
+
+	<!-- 其他環境：將 Log 寫入檔案 -->
+	<!-- 檔案位置請參考 application-*.yml 中的 logging.path 或 logging.file -->
+	<springProfile name="kubernetes">
+		<include resource="org/springframework/boot/logging/logback/file-appender.xml" />
+		<root level="INFO">
+			<appender-ref ref="FILE" />
+		</root>
+	</springProfile>
+
+	<!-- additivity="true" 表示會繼承 root logger 與 parent loggers 的 appenders 設定 -->
+	<logger name="com.twlife.msa.poc" level="DEBUG" additivity="true" />
+
+</configuration>
