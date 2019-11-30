@@ -30,3 +30,4 @@ spec:
               secretKeyRef:
                 name: msa-poc-db-secret
                 key: spring.datasource.password
+      serviceAccountName: config-reader
