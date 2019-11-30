@@ -115,7 +115,7 @@
 						</executions>
 						<configuration>
 							<verbose>true</verbose>
-<!-- 							<images>
+ 							<images>
 								<image>
 									<build>
 										<env>
@@ -126,7 +126,7 @@
 										</env>
 									</build>
 								</image>
-							</images> -->
+							</images>
 						</configuration>
 					</plugin>
 					<plugin>
