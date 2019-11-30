@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head lang="zh">
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/main.css" />
+    <title>AP Log 分析系統 - 錯誤頁</title>
+  </head>
+<body th:with="httpStatus=${T(org.springframework.http.HttpStatus).valueOf(#response.status)}">
+	<h1 th:text="|${httpStatus} - ${httpStatus.reasonPhrase}|">404</h1>
+	<p th:utext="${errorMessage}">Error java.lang.NullPointerException</p>
+	<a href="/" th:href="@{/}">回首頁</a>
+</body>
+</html>

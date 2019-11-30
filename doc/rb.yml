@@ -10,8 +10,10 @@ roleRef:
   name: pod-reader
 subjects:
   - kind: ServiceAccount
-    name: default
-    namespace: default
-  - kind: ServiceAccount
     name: config-reader
+    namespace: default
+  # 如果 deployment.yml 裡頭已指定 serviceAccountName: config-reader，
+  # 以下的 default 就可以不用加了
+  - kind: ServiceAccount
+    name: default
     namespace: default

@@ -30,7 +30,5 @@ dist
 npm-debug.log
 #src/main/resources/application.yml
 #src/main/resources/logback.xml
-aplogconsole.log
-aplogconsole.log.*
 /.apt_generated/
 .factorypath

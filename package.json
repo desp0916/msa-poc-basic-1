@@ -1,0 +1,22 @@
+{
+  "name": "msa-poc-basic-1",
+  "version": "1.0.0",
+  "description": "microservices architecture poc basic 1",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://desp0916@bitbucket.org/desp0916/msa-poc-basic-1.git"
+  },
+  "keywords": [
+    "microservices"
+  ],
+  "author": "Gary Liu",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/desp0916/msa-poc-basic-1#readme"
+}

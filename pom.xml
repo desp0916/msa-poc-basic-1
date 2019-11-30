@@ -27,6 +27,7 @@
 		<spring-cloud-starter-kubernetes.version>1.1.0.RELEASE</spring-cloud-starter-kubernetes.version>
 		<spring-cloud-starter-kubernetes-config.version>1.1.0.BUILD-SNAPSHOT</spring-cloud-starter-kubernetes-config.version>
 		<fabric8.maven.plugin.version>4.3.1</fabric8.maven.plugin.version>
+		<NODE_ENV>production</NODE_ENV>
 	</properties>
 
 	<dependencies>
@@ -83,6 +84,10 @@
 			<artifactId>spring-cloud-starter-kubernetes-all</artifactId>
 			<version>${spring-cloud-starter-kubernetes.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
 	</dependencies>
 
 	<build>
@@ -115,7 +120,7 @@
 						</executions>
 						<configuration>
 							<verbose>true</verbose>
- 							<images>
+							<images>
 								<image>
 									<build>
 										<env>
@@ -147,6 +152,54 @@
 							<skipTests>false</skipTests>
 							<skipITs>false</skipITs>
 						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>com.github.eirslett</groupId>
+						<artifactId>frontend-maven-plugin</artifactId>
+						<version>1.8.0</version>
+						<configuration>
+							<installDirectory>target</installDirectory>
+							<environmentVariables>
+								<NODE_ENV>${NODE_ENV}</NODE_ENV>
+							</environmentVariables>
+						</configuration>
+						<executions>
+							<execution>
+								<id>install node and npm</id>
+								<goals>
+									<goal>install-node-and-npm</goal>
+								</goals>
+								<configuration>
+									<nodeVersion>v12.11.1</nodeVersion>
+									<npmVersion>6.11.3</npmVersion>
+								</configuration>
+							</execution>
+							<execution>
+								<id>npm install</id>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<configuration>
+									<arguments>install</arguments>
+								</configuration>
+							</execution>
+					        <!--
+					          This will build javascript & react code for production using webpack.
+					          http://justincalleja.com/2016/04/17/serving-a-webpack-bundle-in-spring-boot/
+					          https://github.com/eirslett/frontend-maven-plugin#running-webpack
+					          https://webpack.js.org/guides/production/
+					          https://stackoverflow.com/questions/25956937/how-to-build-minified-and-uncompressed-bundle-with-webpack
+					        -->
+							<execution>
+								<id>npm run build</id>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<configuration>
+									<arguments>run build</arguments>
+								</configuration>
+							</execution>
+						</executions>
 					</plugin>
 				</plugins>
 			</build>

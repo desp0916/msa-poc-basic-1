@@ -30,4 +30,5 @@ spec:
               secretKeyRef:
                 name: msa-poc-db-secret
                 key: spring.datasource.password
+      # 讓 pod 可以讀取 configMaps (for spring-cloud-starter-kubernetes-all)
       serviceAccountName: config-reader

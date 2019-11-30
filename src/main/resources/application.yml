@@ -20,7 +20,7 @@ spring:
   profiles:
     # 使用 mvn fabric8:deploy 部署到 K8S 時，會被 src/main/fabric8/deployment.yml
     # 裡面的「SPRING_PROFILES_ACTIVE」環境變數取代（目前設為 minikube）
-    active: kubernetes
+    active: local
   data:
     rest:
       base-path: /api
@@ -34,3 +34,4 @@ spring:
   thymeleaf:
     cache: false
     mode: HTML
+    prefix: classpath:/templates/
