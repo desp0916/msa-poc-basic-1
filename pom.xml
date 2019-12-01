@@ -87,7 +87,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -95,6 +95,51 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<version>1.8.0</version>
+				<configuration>
+					<installDirectory>target</installDirectory>
+					<environmentVariables>
+						<NODE_ENV>${NODE_ENV}</NODE_ENV>
+					</environmentVariables>
+				</configuration>
+				<executions>
+					<execution>
+						<id>install node and npm</id>
+						<goals>
+							<goal>install-node-and-npm</goal>
+						</goals>
+						<configuration>
+							<nodeVersion>v13.2.0</nodeVersion>
+							<npmVersion>6.13.1</npmVersion>
+						</configuration>
+					</execution>
+					<execution>
+						<id>npm install</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>install</arguments>
+						</configuration>
+					</execution>
+					<!-- This will build javascript & react code for production using webpack. 
+						http://justincalleja.com/2016/04/17/serving-a-webpack-bundle-in-spring-boot/ 
+						https://github.com/eirslett/frontend-maven-plugin#running-webpack https://webpack.js.org/guides/production/ 
+						https://stackoverflow.com/questions/25956937/how-to-build-minified-and-uncompressed-bundle-with-webpack -->
+					<execution>
+						<id>npm run build</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>run build</arguments>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -152,54 +197,6 @@
 							<skipTests>false</skipTests>
 							<skipITs>false</skipITs>
 						</configuration>
-					</plugin>
-					<plugin>
-						<groupId>com.github.eirslett</groupId>
-						<artifactId>frontend-maven-plugin</artifactId>
-						<version>1.8.0</version>
-						<configuration>
-							<installDirectory>target</installDirectory>
-							<environmentVariables>
-								<NODE_ENV>${NODE_ENV}</NODE_ENV>
-							</environmentVariables>
-						</configuration>
-						<executions>
-							<execution>
-								<id>install node and npm</id>
-								<goals>
-									<goal>install-node-and-npm</goal>
-								</goals>
-								<configuration>
-									<nodeVersion>v12.11.1</nodeVersion>
-									<npmVersion>6.11.3</npmVersion>
-								</configuration>
-							</execution>
-							<execution>
-								<id>npm install</id>
-								<goals>
-									<goal>npm</goal>
-								</goals>
-								<configuration>
-									<arguments>install</arguments>
-								</configuration>
-							</execution>
-					        <!--
-					          This will build javascript & react code for production using webpack.
-					          http://justincalleja.com/2016/04/17/serving-a-webpack-bundle-in-spring-boot/
-					          https://github.com/eirslett/frontend-maven-plugin#running-webpack
-					          https://webpack.js.org/guides/production/
-					          https://stackoverflow.com/questions/25956937/how-to-build-minified-and-uncompressed-bundle-with-webpack
-					        -->
-							<execution>
-								<id>npm run build</id>
-								<goals>
-									<goal>npm</goal>
-								</goals>
-								<configuration>
-									<arguments>run build</arguments>
-								</configuration>
-							</execution>
-						</executions>
 					</plugin>
 				</plugins>
 			</build>
