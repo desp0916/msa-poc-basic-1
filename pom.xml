@@ -25,7 +25,6 @@
 		<!-- https://stackoverflow.com/questions/56142369/why-am-i-getting-unknown-error-in-line-1-of-pom-xml/56275263#56275263 -->
 		<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
 		<spring-cloud-starter-kubernetes.version>1.1.0.RELEASE</spring-cloud-starter-kubernetes.version>
-		<spring-cloud-starter-kubernetes-config.version>1.1.0.BUILD-SNAPSHOT</spring-cloud-starter-kubernetes-config.version>
 		<fabric8.maven.plugin.version>4.3.1</fabric8.maven.plugin.version>
 		<NODE_ENV>production</NODE_ENV>
 	</properties>
@@ -75,18 +74,13 @@
 			<artifactId>spring-boot-actuator-autoconfigure</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-kubernetes-config</artifactId>
-			<version>${spring-cloud-starter-kubernetes-config.version}</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-kubernetes-all</artifactId>
 			<version>${spring-cloud-starter-kubernetes.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 	</dependencies>
 
