@@ -24,7 +24,7 @@ public class DBLoader implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		if (this.articles.findOne(1L) != null) {
+		if (true) {
 			return;
 		}
 		this.articles.save(new Article("subject", "content"));

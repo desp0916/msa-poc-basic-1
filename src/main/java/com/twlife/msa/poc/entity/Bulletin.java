@@ -1,14 +1,9 @@
-/**
- * Bulletin.java
- *
- * 系統作業佈告欄
- *
- * 用來維護佈告欄資料
- *
- * @author gary
- * @since  2017年3月7日 下午12:51:56
- */
 package com.twlife.msa.poc.entity;
+
+import static com.twlife.msa.poc.Constants.DATETIME_COLUMN_DEFINITION_CREATED_DATE;
+import static com.twlife.msa.poc.Constants.DATETIME_COLUMN_DEFINITION_UPDATED_DATE;
+import static com.twlife.msa.poc.Constants.DATETIME_COLUMN_PATTERN;
+import static com.twlife.msa.poc.Constants.DATETIME_COLUMN_TIMEZONE;
 
 import java.util.Date;
 
@@ -36,6 +31,16 @@ import org.springframework.data.rest.core.annotation.Description;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * Bulletin.java
+ *
+ * 系統作業佈告欄
+ *
+ * 用來維護佈告欄資料
+ *
+ * @author gary <Desp.Liu@taiwanlife.com>
+ * @since  2017年3月7日 下午12:51:56
+ */
 @Entity
 @Table(name = "bulletin")
 public class Bulletin {
@@ -74,8 +79,8 @@ public class Bulletin {
 	 */
 	@Description("作業時段 - 開始時間")
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="start_time", columnDefinition = "timestamp with time zone not null")
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Taipei")
+	@Column(name="start_time", columnDefinition = DATETIME_COLUMN_DEFINITION_CREATED_DATE)
+	@JsonFormat(pattern=DATETIME_COLUMN_PATTERN, timezone=DATETIME_COLUMN_TIMEZONE)
 	private Date startTime;
 
 	/**
@@ -83,8 +88,8 @@ public class Bulletin {
 	 */
 	@Description("作業時段 - 結束時間")
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="end_time", columnDefinition = "timestamp with time zone not null")
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Taipei")
+	@Column(name="end_time", columnDefinition = DATETIME_COLUMN_DEFINITION_CREATED_DATE)
+	@JsonFormat(pattern=DATETIME_COLUMN_PATTERN, timezone=DATETIME_COLUMN_TIMEZONE)
 	private Date endTime;
 
 	/**
@@ -128,9 +133,9 @@ public class Bulletin {
 	@Description("資料建立日期")
 	@NotNull(message = "bulletin.createdDate.empty.Bulletin.createdDate")
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "created_date", columnDefinition = "timestamp with time zone not null",
-		nullable = false, updatable = false)
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Taipei")
+	@Column(name = "created_date", columnDefinition = DATETIME_COLUMN_DEFINITION_CREATED_DATE,
+	nullable = false, updatable = false)
+	@JsonFormat(pattern = DATETIME_COLUMN_PATTERN, timezone = DATETIME_COLUMN_TIMEZONE)
 	@CreatedDate
 	private Date createdDate;
 
@@ -139,8 +144,8 @@ public class Bulletin {
 	 */
 	@Description("資料異動日期")
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(columnDefinition = "timestamp with time zone")
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Taipei")
+	@Column(columnDefinition = DATETIME_COLUMN_DEFINITION_UPDATED_DATE)
+	@JsonFormat(pattern=DATETIME_COLUMN_PATTERN, timezone=DATETIME_COLUMN_TIMEZONE)
 	@LastModifiedDate
 	private Date updatedDate;
 

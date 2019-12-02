@@ -40,12 +40,13 @@ function FetchWrapper(url, headers, onSuccess, onFailure) {
 /**
  * 列出文章
  * 
- * @param {*} pageSize 
+ * @param {*} pageNumber
+ * @param {*} sort
  * @param {*} onSuccess 
  * @param {*} onFailure 
  */
-function ListArticles(pageSize, onSuccess, onFailure) {
-  const API_URI = `${Globals.API_ROOT}/articles/?size=${pageSize}`;
+function ListArticles(pageNumber, sort, onSuccess, onFailure) {
+  const API_URI = `${Globals.API_ROOT}/articles/?size=${Globals.PAGE_SIZE}&number=${pageNumber}&sort=${sort.field},${sort.direction}`;
   const headers = new Headers({ 'Content-Type': 'application/json', 'Accept': 'application/hal+json' });
   FetchWrapper(API_URI, headers,  onSuccess, onFailure);
 }

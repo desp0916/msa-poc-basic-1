@@ -1,7 +1,9 @@
 import React from 'react';
+import { LinkContainer } from 'react-router-bootstrap';
+import { ButtonToolbar, Button } from 'react-bootstrap';
 import * as Globals from '../common/Globals';
 import { ListArticles } from '../common/DataUtils';
-import { ItemList, ItemRow } from '../common/ItemList';
+import { Sort, ItemList, ItemRow } from '../common/ItemList';
 
 export default class ArticlePage extends React.Component {
 
@@ -13,8 +15,8 @@ export default class ArticlePage extends React.Component {
       id: ['ID', 'id'],
       subject: ['主旨', 'subject'],
       content: ['內文', 'content'],
-      shortCreatedDate: ['資料建立日期', 'createdDate'],
-      shortUpdatedDate: ['資料更新日期', 'updatedDate'],
+      createdDate: ['資料建立日期', 'createdDate'],
+      updatedDate: ['資料更新日期', 'updatedDate'],
     };
     this.state = {
       items: [],
@@ -24,6 +26,7 @@ export default class ArticlePage extends React.Component {
         totalPages: 0,
         number: 0     // 第一頁
       },
+      sort: new Sort(this.columns.updatedDate[1], 'desc')
     };
     this.detailColumn = 'subject';
     this.detailPath = '/Article/ArticleForm';
@@ -34,7 +37,7 @@ export default class ArticlePage extends React.Component {
   }
 
   componentDidMount() {
-    ListArticles(Globals.PAGE_SIZE, 
+    ListArticles(this.state.page.number, this.state.sort,
       (response) => {
         this.setState({
           items: response._embedded[this.repository],
@@ -42,6 +45,21 @@ export default class ArticlePage extends React.Component {
         });
       },
       this._showErrors);
+  }
+
+  _handleSearch(pageNo = 0, sort = this.state.sort) {
+    ListArticles(pageNo, sort,
+      (response) => {
+        this.setState({
+          items: response._embedded[this.repository],
+          page: response.page,
+        });
+      },
+      this._showErrors);
+  }
+
+  _handleRefreshList() {
+    this._handleSearch(this.state.page.number, sort = this.state.sort);
   }
 
   _showErrors(response) {
@@ -57,13 +75,24 @@ export default class ArticlePage extends React.Component {
       this.state.items.map(item => 
         <ItemRow key={item.id} item={item} columns={this.columns}
          detailColumn={this.detailColumn} detailPath={this.detailPath}
+          buttons={[
+            <LinkContainer key={item.id+'button'} to={`${this.detailPath}/${item.id}`}>
+              <Button key={item.id+'_edit'} variant="link">修改</Button>
+            </LinkContainer>,
+            <Button key={item.id+'_delete'} onClick={() => this._handleDelete(item)} variant="link">刪除</Button>
+          ]}
         />
       ) : null;
   }
 
   render() {
     return (<div>
-      <ItemList page={this.state.page} itemRows={this._renderItemRows()} />
+      <ItemList
+        page={this.state.page}
+        columns={this.columns}
+        onSearch={this._handleSearch}
+        itemRows={this._renderItemRows()}
+        sort={this.state.sort} />
     </div>);
   }
 

@@ -28,8 +28,7 @@
 
 	<contextName>Log Settings for msa-poc-basic-1</contextName>
 	<property name="CHARSET" value="UTF-8" />
-	<include
-		resource="org/springframework/boot/logging/logback/defaults.xml" />
+	<include resource="org/springframework/boot/logging/logback/defaults.xml" />
 	<!-- 注意，如果使用以下 base.xml 這個檔案，root logger（level="INFO"）的「appender-ref」會有 
 		CONSOLE 與 FILE -->
 	<!-- include resource="org/springframework/boot/logging/logback/base.xml" / -->

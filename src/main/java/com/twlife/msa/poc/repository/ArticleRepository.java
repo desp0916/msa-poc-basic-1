@@ -20,7 +20,8 @@ import com.twlife.msa.poc.entity.Article;
  *
  */
 @Transactional
-@RepositoryRestResource(collectionResourceRel = "articles", path = "articles")
+@RepositoryRestResource(collectionResourceRel = "articles", path = "articles",
+	excerptProjection = ArticleInlineProjection.class)
 public interface ArticleRepository extends BaseRepository<Article, Long> {
 
 	/**

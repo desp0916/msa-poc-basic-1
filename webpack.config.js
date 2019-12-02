@@ -7,13 +7,9 @@ module.exports = {
     entry: path.join(__dirname, srcPath, 'index.js'),
     output: {
         path: path.join(__dirname, outputPath),
-        filename: 'main.bundle.js',
-        // chunkFilename: '[name].bundle.js',
-    },
-    optimization: {
-      splitChunks: {
-        chunks: 'all',
-      },
+        filename: '[name].bundle.js',
+        chunkFilename: '[name].bundle.js',
+        publicPath: 'js/'
     },
     mode: process.env.NODE_ENV || 'development',
     resolve: {

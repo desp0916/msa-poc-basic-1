@@ -26,12 +26,3 @@ spring:
     cache: false
     mode: HTML
     prefix: classpath:/templates/
-
-management:
-  endpoint:
-    restart:
-      enabled: true
-    health:
-      enabled: true
-    info:
-      enabled: true

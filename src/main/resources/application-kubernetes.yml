@@ -1,26 +1,10 @@
 # ===================================================================
-# 開發環境設定檔
+# Kubernetes 環境設定檔
 # ===================================================================
 
 # ----------------------------------------
-# CORE PROPERTIES
+# Core properties
 # ----------------------------------------
-
-# LOGGING
-# 使用「spring-boot-starter-logging」內建的 logback
-# https://docs.spring.io/spring-boot/docs/current/reference/html/howto-logging.html
-logging:
-# 使用 Spring Boot 預設值（Log 顯示在 Console），所以將以下設定註解掉
-  file: /tmp/app.log
-  level:
-    com.twlife.msa.poc: DEBUG
-#    org.springframework.web: DEBUG
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-#    org.springframework.data.jpa.repository.query.SpelExpressionStringQueryParameterBinder: OFF
-    org.springframework.security: INFO
-
-# IDENTITY (ContextIdApplicationContextInitializer)
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -42,26 +26,46 @@ spring:
     properties:
       hibernate:
         format_sql: true
+# ----------------------------------------
+# spring-cloud-kubernetes
+# https://cloud.spring.io/spring-cloud-kubernetes/reference/html/appendix.html
+# ----------------------------------------
   cloud:
     kubernetes:
-      config:
-        enabled: true
       discovery:
         all-namespaces: true
-
+      reload:
+        enabled: true
+        mode: polling
+        period: 5000
+      config:
+        sources:
+          - name: other
+          - name: ${spring.application.name}
 # ----------------------------------------
-# WEB PROPERTIES
+# Actuator 的 endpoints
+# https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html#production-ready-endpoints
 # ----------------------------------------
-
-# EMBEDDED SERVER CONFIGURATION (ServerProperties)
-server:
-  port: 8080
-# contextPath: /web
-# 如果關閉 SSL 以後，無法以 Chrome 登入，請先使用「開發者工具」
-# 中的「Application -> Clear Storage」將全部的相關資料都清
-# 除，包含：Application, Storage, Cache 等。
-#  ssl:
-#    enabled: true
-#    key-store: classpath:keystore.jks
-#    key-store-password: 1qaz@WSX
-#    keyAlias: tomcat
+management:
+  endpoint:
+    restart:
+      enabled: true
+    health:
+      enabled: true
+    info:
+      enabled: true
+# ----------------------------------------
+# Logging
+# 使用「spring-boot-starter-logging」內建的 logback
+# https://docs.spring.io/spring-boot/docs/current/reference/html/howto-logging.html
+# ----------------------------------------
+logging:
+# 使用 Spring Boot 預設值（Log 顯示在 Console），所以將以下設定註解掉
+  file: /tmp/app.log
+  level:
+    com.twlife.msa.poc: DEBUG
+#    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+#    org.springframework.data.jpa.repository.query.SpelExpressionStringQueryParameterBinder: OFF
+    org.springframework.security: INFO

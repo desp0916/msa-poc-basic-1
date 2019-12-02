@@ -1,5 +1,10 @@
 package com.twlife.msa.poc.entity;
 
+import static com.twlife.msa.poc.Constants.DATETIME_COLUMN_DEFINITION_CREATED_DATE;
+import static com.twlife.msa.poc.Constants.DATETIME_COLUMN_DEFINITION_UPDATED_DATE;
+import static com.twlife.msa.poc.Constants.DATETIME_COLUMN_PATTERN;
+import static com.twlife.msa.poc.Constants.DATETIME_COLUMN_TIMEZONE;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -31,7 +36,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *
  * @author gary <Desp.Liu@taiwanlife.com>
  * @since Nov 22, 2019 11:59:13 AM
- *
  */
 @Entity
 @Table(name = "article")
@@ -41,7 +45,7 @@ public class Article {
 	 * 文章 ID（流水號）
 	 */
 	@Id
-	@Description("報表排程任務ID")
+	@Description("文章ID")
 	@NotNull(message = "article.id.empty.Article.id")
 	@GenericGenerator(
 	        name = "articleIdSequenceGenerator",
@@ -67,7 +71,7 @@ public class Article {
 	/**
 	 * 文章內容 (最多 4096 個字元)
 	 */
-	@Description("作業內容 (最多 4096 個字元)")
+	@Description("文章內容 (最多 4096 個字元)")
 	@Lob
 	@NotNull(message = "article.content.empty.Article.content")
 	@Column(name="content", nullable = false, length = 4096)
@@ -91,9 +95,9 @@ public class Article {
 	@Description("資料建立日期")
 	@NotNull(message = "article.createdDate.empty.Article.createdDate")
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "created_date", columnDefinition = "timestamp with time zone not null",
-		nullable = false, updatable = false)
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Taipei")
+	@Column(name = "created_date", columnDefinition = DATETIME_COLUMN_DEFINITION_CREATED_DATE,
+			nullable = false, updatable = false)
+	@JsonFormat(pattern = DATETIME_COLUMN_PATTERN, timezone = DATETIME_COLUMN_TIMEZONE)
 	@CreatedDate
 	private Date createdDate;
 
@@ -102,8 +106,8 @@ public class Article {
 	 */
 	@Description("資料異動日期")
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(columnDefinition =  "timestamp with time zone not null")
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Taipei")
+	@Column(columnDefinition = DATETIME_COLUMN_DEFINITION_UPDATED_DATE)
+	@JsonFormat(pattern=DATETIME_COLUMN_PATTERN, timezone=DATETIME_COLUMN_TIMEZONE)
 	@LastModifiedDate
 	private Date updatedDate;
 
@@ -116,14 +120,15 @@ public class Article {
 	@ColumnDefault("0")
 	private Long version;
 
-	public Article() {}
+	public Article() {
+
+	}
 
 	/**
 	 * 文章基本資料
 	 *
-	 * @param subject
-	 * @param content
-	 * @param dataStatus
+	 * @param subject 主旨（不可為 NULL）
+	 * @param content 文章內容 (最多 4096 個字元)（不可為 NULL）
 	 */
 	public Article(String subject, String content) {
 		this.subject = subject;
@@ -158,6 +163,22 @@ public class Article {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	/**
+	 * 取得「資料建立日期」（用於 Inline Projection）
+	 * @JsonFormat(pattern="yyyy-MM-dd")
+	 */
+	public Date getShortCreatedDate() {
+		return createdDate;
+	}
+
+	/**
+	 * 取得「資料異動日期」（用於 Inline Projection）
+	 * @JsonFormat(pattern="yyyy-MM-dd")
+	 */
+	public Date getShortUpdatedDate() {
+		return updatedDate;
 	}
 
 	public String getSubject() {
