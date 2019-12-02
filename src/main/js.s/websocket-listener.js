@@ -1,0 +1,18 @@
+'use strict';
+
+var SockJS = require('sockjs-client'); // <1>
+var Stomp = require('stompjs').Stomp;
+
+function register(registrations) {
+  var socket = SockJS('/aplogconsole'); // <3>
+  var stompClient = Stomp.over(socket);
+  stompClient.connect({}, function(frame) {
+    registrations.forEach(function (registration) { // <4>
+      stompClient.subscribe(registration.route, registration.callback);
+    });
+  });
+}
+
+module.exports = {
+  register: register
+};

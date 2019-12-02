@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "webpack": "NODE_ENV=production webpack",
-    "start": "webpack --watch",
+    "start": "webpack-dev-server --open",
     "build": "webpack --mode production"
   },
   "keywords": [],
@@ -31,13 +31,7 @@
     "webpack-dev-server": "3.9.0"
   },
   "dependencies": {
-    "bootstrap": "^4.4.1",
     "react": "16.12.0",
-    "react-bootstrap": "^1.0.0-beta.16",
-    "react-bootstrap-datetimepicker": "^0.0.22",
-    "react-dom": "16.12.0",
-    "react-loadable": "^5.5.0",
-    "react-router-bootstrap": "^0.25.0",
-    "react-router-dom": "^5.1.2"
+    "react-dom": "16.12.0"
   }
 }

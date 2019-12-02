@@ -44,6 +44,8 @@ spring:
         format_sql: true
   cloud:
     kubernetes:
+      config:
+        enabled: true
       discovery:
         all-namespaces: true
 

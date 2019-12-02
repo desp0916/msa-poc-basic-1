@@ -5,15 +5,6 @@
 # https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-management:
-  endpoint:
-    restart:
-      enabled: true
-    health:
-      enabled: true
-    info:
-      enabled: true
-
 spring:
   application:
     name: msa-poc-basic-1
@@ -35,3 +26,12 @@ spring:
     cache: false
     mode: HTML
     prefix: classpath:/templates/
+
+management:
+  endpoint:
+    restart:
+      enabled: true
+    health:
+      enabled: true
+    info:
+      enabled: true

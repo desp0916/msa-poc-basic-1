@@ -41,6 +41,11 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  cloud:
+    kubernetes:
+      config:
+        # 本機開發時，關閉此設定以免因抓不到 configMaps 而拋出 exception
+        enabled: false
  
 # ----------------------------------------
 # WEB PROPERTIES
