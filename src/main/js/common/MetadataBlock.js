@@ -9,10 +9,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-MetadataBlock.propTypes = {
-  show: React.PropTypes.bool,
-  data: React.PropTypes.object,
-};
+// MetadataBlock.propTypes = {
+//   show: React.PropTypes.bool,
+//   data: React.PropTypes.object,
+// };
 
 function MetadataBlock(props) {
   return (props.show) ? (
@@ -25,11 +25,11 @@ function MetadataBlock(props) {
   ) : null;
 }
 
-MetadataBlock.propTypes = {
-  show: PropTypes.bool,
-  data: PropTypes.object
-};
+// MetadataBlock.propTypes = {
+//   show: PropTypes.bool,
+//   data: PropTypes.object
+// };
 
-module.exports = {
+export {
   MetadataBlock,
 };

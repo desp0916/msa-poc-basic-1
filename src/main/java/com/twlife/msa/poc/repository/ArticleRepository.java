@@ -1,5 +1,7 @@
 package com.twlife.msa.poc.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,6 +25,11 @@ import com.twlife.msa.poc.entity.Article;
 @RepositoryRestResource(collectionResourceRel = "articles", path = "articles",
 	excerptProjection = ArticleInlineProjection.class)
 public interface ArticleRepository extends BaseRepository<Article, Long> {
+
+	@Override
+	@Query(value = "SELECT a FROM Article a WHERE a.dataStatus = 1",
+			nativeQuery = false)
+	Page<Article> findAll(Pageable pageable);
 
 	/**
 	 * <p>檢視單篇文章（不需要限制權限）</p>

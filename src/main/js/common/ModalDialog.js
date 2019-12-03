@@ -13,11 +13,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal } from 'react-bootstrap';
 
-function ModalDialog(props) {
+export default function ModalDialog(props) {
   return (
     <Modal show={props.show} onHide={props.onHide}>
       <Modal.Header closeButton>
-        <Modal.Title>{props.title}</Modal.Title>
+        <Modal.Title>{props.title}zzzzz</Modal.Title>
       </Modal.Header>
       <Modal.Body>{props.children}</Modal.Body>
       <Modal.Footer></Modal.Footer>
@@ -25,13 +25,9 @@ function ModalDialog(props) {
   );
 }
 
-ModalDialog.propTypes = {
-  title: PropTypes.string,
-  show: PropTypes.bool,
-  onHide: PropTypes.func,
-  children: PropTypes.object,
-};
-
-export {
-  ModalDialog,
-};
+// ModalDialog.propTypes = {
+//   title: PropTypes.string,
+//   show: PropTypes.bool,
+//   onHide: PropTypes.func,
+//   children: PropTypes.object,
+// };

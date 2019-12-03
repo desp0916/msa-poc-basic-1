@@ -8,15 +8,13 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Form } from 'react-bootstrap';
-
+import { Button, Form, Modal } from 'react-bootstrap';
 import * as Globals from '../common/Globals';
+
 import { MetadataBlock } from '../common/MetadataBlock';
-import { FormError, FieldGroup, TextArea, Span, DateTimeFieldGroup } from '../common/FormObjects';
-import { FetchItemById, PostEntity, PatchEntity, showSuccessMsg, showFailureMsg } from '../common/DataUtils';
-import 'react-bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css';
-import moment from 'moment';
-import { ModalDialog } from '../common/ModalDialog';
+import { FormError, FieldGroup, TextArea, Span } from '../common/FormObjects';
+import { GetEntityById, PostEntity, PatchEntity, showSuccessMsg, showFailureMsg } from '../common/DataUtils';
+import ModalDialog from '../common/ModalDialog';
 
 export default class ArticleForm extends React.Component {
 
@@ -27,15 +25,14 @@ export default class ArticleForm extends React.Component {
       response: {},
       errors: {},
       isLoading: false,
-      showDialog: false,
+      showDialog: true,
     };
 
-    this.repository = 'Articles';
+    this.repository = 'articles';
     this.dialogTitles = {};
     this.dialogTitles[Globals.ACT_CREATE] = '新增佈告';
     this.dialogTitles[Globals.ACT_UPDATE] = '修改佈告';
     this.item = {};       // 暫存物件
-    this.now = moment().format('YYYY-MM-DD HH:mm:00');
     this.inputs = {};
     this.errors = {};
 
@@ -43,16 +40,15 @@ export default class ArticleForm extends React.Component {
     this._handleHide = this._handleHide.bind(this);
     this._showErrors = this._showErrors.bind(this);
     this._handleSuccess = this._handleSuccess.bind(this);
-    this._handleChangeTime = this._handleChangeTime.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.itemWillChange(nextProps.match.params.itemId);
-  }
+// //   UNSAFE_componentWillReceiveProps(nextProps) {
+// //     this.itemWillChange(nextProps.match.params.itemId);
+// //   }
 
-  componentWillMount() {
-    this.itemWillChange(this.props.match.params.itemId);
-  }
+// //   UNSAFE_componentDidMount() {
+// //     this.itemWillChange(this.props.match.params.itemId);
+// //   }
 
   _handleHide() {
     this.setState({
@@ -61,36 +57,25 @@ export default class ArticleForm extends React.Component {
     this.props.history.goBack();
   }
 
+  componentDidMount() {
+    this.itemWillChange(this.props.match.params.itemId);
+  }
+
   itemWillChange(itemId) {
-    if (itemId.toString().length > 0 && this.props.act === Globals.ACT_UPDATE) {
-      this.setState({ isLoading: true, showDialog: false });
-      FetchItemById(this.repository, itemId,
-        (response) => {
-          const freshItem = Object.assign({headers: response.headers, _links: response.entity._links}, response.entity);
-          this.setState({
-            item: freshItem,
-            isLoading: false,
-            showDialog: true,    
-          });
-        },
-        (response) => { alert('載入資料失敗'); }
-      );
-    } else {
       this.setState({
         item: { startTime: this.now, endTime: this.now },
         isLoading: false,
         showDialog: true
       });
-    }
   }
 
   _handleSubmit(e) {
     e.preventDefault();
     this._clearErrors();
     if (this.props.act === Globals.ACT_UPDATE) {
-      PatchEntity(this.state.item, this.inputs, this.repository, this._handleSuccess, this._showErrors);
+    //   PatchEntity(this.state.item, this.inputs, this.repository, this._handleSuccess, this._showErrors);
     } else if (this.props.match.params.itemId === Globals.ACT_CREATE) {
-      PostEntity(this.inputs, this.repository, this._handleSuccess, this._showErrors);
+    //   PostEntity(this.inputs, this.repository, this._handleSuccess, this._showErrors);
     } else {
       console.error('未知的操作');
     }
@@ -113,38 +98,21 @@ export default class ArticleForm extends React.Component {
     }
   }
 
-  _handleChangeTime(fieldName, newDate) {
-    Object.assign(this.state.item[fieldName], {value: newDate});
-    // console.log('######' + fieldName);
-    // this.setState({fieldName: newDate});
-  }
-
   render() {
     return (
       <ModalDialog title={this.dialogTitles[this.props.act]} show={this.state.showDialog} onHide={this._handleHide}>
         <Form onSubmit={this._handleSubmit}>
           <FormError error={this.state.errors.id} />
           <FieldGroup id="subject" type="text" label="主旨 *" placeholder="請輸入主旨" 
-            defaultValue={this.state.item.subject} inputRef={ref => this.inputs.subject = ref}
+            defaultValue={this.state.item.subject} 
             help={this.state.errors.subject} maxLength={150} />
-          <DateTimeFieldGroup id="startTime" label="作業開始時間 *" defaultValue={this.state.item.startTime} 
-            help={this.state.errors.startTime}
-            onChange={(newDate) => { this._handleChangeTime('startTime', newDate); } }/>
-          <DateTimeFieldGroup id="endTime" label="作業結束時間 *" defaultValue={this.state.item.endTime}
-            help={this.state.errors.endTime}
-            onChange={(newDate) => { this._handleChangeTime('endTime', newDate); } }/>
-          <TextArea id="content" label="作業內容 *" placeholder="請輸入作業內容"
-            defaultValue={this.state.item.content} inputRef={ref => this.inputs.content = ref}
+          <TextArea id="content" label="文章內容 *" placeholder="請輸入文章內容"
+            defaultValue={this.state.item.content} 
             help={this.state.errors.content} maxLength={4096} />
-          <TextArea id="impact" label="作業影響範圍 *" placeholder="請輸入作業影響範圍" 
-            defaultValue={this.state.item.impact} inputRef={ref => this.inputs.impact = ref}
-            help={this.state.errors.impact} maxLength={1024} />
-          <TextArea id="contactInfo" label="聯絡資訊 *" placeholder="請輸入聯絡資訊"
-            defaultValue={this.state.item.contactInfo} inputRef={ref => this.inputs.contactInfo = ref} help={this.state.errors.contactInfo} maxLength={1024} />
           <MetadataBlock show={this.props.act === Globals.ACT_UPDATE} data={this.state.item} />
           <div style={Globals.STYLE_CENTER}>
             <Button onClick={this._handleHide}>取消</Button><Span/>
-            <Button bsStyle="primary" type="submit">儲存</Button>
+            <Button variant="primary" type="submit">儲存</Button>
           </div>
         </Form>
       </ModalDialog>
@@ -152,8 +120,21 @@ export default class ArticleForm extends React.Component {
   }
 }
 
-ArticleForm.propTypes = {
-  match: PropTypes.object,
-  history: PropTypes.object,
-  act: PropTypes.string,
-};
+
+
+    //   <ModalDialog title={this.dialogTitles[this.props.act]} show={this.state.showDialog} onHide={this._handleHide}>
+    //     <Form onSubmit={this._handleSubmit}>
+    //       <FormError error={this.state.errors.id} />
+    //       <FieldGroup id="subject" type="text" label="主旨 *" placeholder="請輸入主旨" 
+    //         defaultValue={this.state.item.subject} 
+    //         help={this.state.errors.subject} maxLength={150} />
+    //       <TextArea id="content" label="文章內容 *" placeholder="請輸入文章內容"
+    //         defaultValue={this.state.item.content} 
+    //         help={this.state.errors.content} maxLength={4096} />
+    //       <MetadataBlock show={this.props.act === Globals.ACT_UPDATE} data={this.state.item} />
+    //       <div style={Globals.STYLE_CENTER}>
+    //         <Button onClick={this._handleHide}>取消</Button><Span/>
+    //         <Button variant="primary" type="submit">儲存</Button>
+    //       </div>
+    //     </Form>
+    //   </ModalDialog>

@@ -29,6 +29,67 @@ function Loading(props) {
   }
 }
 
+// Loading.propTypes = {
+//   error: PropTypes.bool,
+//   timedOut: PropTypes.bool,
+//   pastDelay: PropTypes.bool,
+// };
+
+/**
+ * FormError
+ * 用於顯示整個表單（非特定欄位）的錯誤訊息
+ * 如：不合法的認證
+ */
+function FormError({ error }) {
+  return (error) ? (
+    <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback>
+  ) : null;
+}
+
+// FormError.propTypes = {
+//   error: PropTypes.string,
+// };
+
+/**
+ *  FieldGroup
+ */
+function FieldGroup({ id, label, help, ...props }) {
+  return (
+    <Form.Group controlId={id}>
+      <Form.Label>{label}</Form.Label>
+      <Form.Control {...props} />
+      {help && <Form.Control.Feedback>{help}</Form.Control.Feedback>}
+    </Form.Group>
+  );
+}
+
+// FieldGroup.propTypes = {
+//   id: PropTypes.string,
+//   label: PropTypes.string,
+//   help: PropTypes.string,
+// };
+
+/**
+ * TextArea
+ */
+function TextArea({ id, label, help, ...props }) {
+  return (
+    <Form.Group
+      id={id}
+      label={label}
+      as="textarea"
+      help={help}
+      {...props}
+    />
+  );
+}
+
+// TextArea.propTypes = {
+//   id: PropTypes.string,
+//   label: PropTypes.string,
+//   help: PropTypes.string,
+// };
+
 /**
  * Span
  */
@@ -38,5 +99,8 @@ function Span() {
 
 export {
   Loading,
+  FormError,
+  FieldGroup,
+  TextArea,
   Span,
 };

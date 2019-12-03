@@ -15,14 +15,14 @@
 import * as Globals from '../common/Globals';
 
 /**
- * Fetch API Wrapper
+ * Fetch API Wrapper (for GET method only)
  * 
- * @param {*} url 
- * @param {*} headers 
- * @param {*} onSuccess 
- * @param {*} onFailure 
+ * @param {string} url 
+ * @param {object} headers 
+ * @param {function} onSuccess 
+ * @param {function} onFailure 
  */
-function FetchWrapper(url, headers, onSuccess, onFailure) {
+function FetchGetWrapper(url, headers, onSuccess, onFailure) {
   fetch(url, {
     credentials: 'include',
     method: 'GET',
@@ -38,19 +38,157 @@ function FetchWrapper(url, headers, onSuccess, onFailure) {
 }
 
 /**
- * 列出文章
+ * 取得多筆資料（repository）
  * 
- * @param {*} pageNumber
- * @param {*} sort
- * @param {*} onSuccess 
- * @param {*} onFailure 
+ * @param {number} pageNumber
+ * @param {object} sort
+ * @param {function} onSuccess 
+ * @param {function} onFailure 
  */
-function ListArticles(pageNumber, sort, onSuccess, onFailure) {
-  const API_URI = `${Globals.API_ROOT}/articles/?size=${Globals.PAGE_SIZE}&number=${pageNumber}&sort=${sort.field},${sort.direction}`;
+function GetRepository(repository, pageNumber, sort, onSuccess, onFailure) {
+  const API_URI = `${Globals.API_ROOT}/${repository}/?size=${Globals.PAGE_SIZE}&number=${pageNumber}&sort=${sort.field},${sort.direction}`;
   const headers = new Headers({ 'Content-Type': 'application/json', 'Accept': 'application/hal+json' });
-  FetchWrapper(API_URI, headers,  onSuccess, onFailure);
+  FetchGetWrapper(API_URI, headers,  onSuccess, onFailure);
 }
 
+/**
+ * 根據 Id 來取得資料
+ * 
+ * @param {string} repository 
+ * @param {string} entityId 
+ * @param {function} onSuccess 
+ * @param {function} onFailure 
+ */
+function GetEntityById(repository, entityId, onSuccess, onFailure) {
+  const API_URI = `${Globals.API_ROOT}/${repository}/${entityId}`;
+  FetchGetWrapper(API_URI, headers,  onSuccess, onFailure);
+}
+
+/**
+ * 新增一筆資料
+ * 
+ * @param {string} repository 
+ * @param {object} inputs 
+ * @param {function} onSuccess 
+ * @param {function} onFailure 
+ */
+function PostEntity(repository, inputs, onSuccess, onFailure) {
+  let item = {};
+  Object.keys(inputs).map(key => {
+    if (typeof inputs[key].value !== 'undefined') {
+      item[key] = inputs[key].value.trim();
+    }
+  });
+  fetch(url, {
+    body: JSON.stringify(item),
+    cache: 'no-cache',
+    credentials: 'same-origin',
+    headers: {
+      'content-type': 'application/json'
+    },
+    method: 'POST',
+    mode: 'cors',
+    redirect: 'follow',
+    referrer: 'no-referrer',
+  })
+  .then(
+    response => { if (onSuccess) { onSuccess(response); }},
+    response => { if (onFailure) { onFailure(response); }}
+  );
+}
+
+/**
+ * 修改單一筆資料
+ * 
+ * @param {string} repository 
+ * @param {object} entity 
+ * @param {object} inputs 
+ * @param {function} onSuccess 
+ * @param {function} onFailure 
+ */
+function PatchEntity(repository, entity, inputs, onSuccess, onFailure) {
+  Object.keys(inputs).map(key => {
+    if (typeof inputs[key].value !== 'undefined') {
+      entity[key] = inputs[key].value.trim();
+    }
+  });
+  let url = entity._links.self.href;
+  fetch(url, {
+    body: JSON.stringify(entity),
+    cache: 'no-cache',
+    credentials: 'same-origin',
+    headers: {
+      'content-type': 'application/json'
+    },
+    method: 'PATCH',
+    mode: 'cors',
+    redirect: 'follow',
+    referrer: 'no-referrer',
+  })
+  .then(
+    response => { if (onSuccess) { onSuccess(response); }},
+    response => { if (onFailure) { onFailure(response); }}
+  );
+}
+
+/**
+ * 刪除單一筆資料
+ * 
+ * @param {object} entity 
+ * @param {function} onSuccess 
+ * @param {function} onFailure 
+ */
+function DeleteEntity(entity, onSuccess, onFailure) {
+  fetch(entity._links.self.href, {
+    cache: 'no-cache',
+    credentials: 'same-origin',
+    headers: {
+      'content-type': 'application/json'
+    },
+    method: 'DELETE',
+    mode: 'cors',
+    redirect: 'follow',
+    referrer: 'no-referrer',
+  })
+  .then(
+    response => { if (onSuccess) { onSuccess(response); }},
+    response => {
+      if (response.status === 403) {
+        alert('禁止存取。您並未被授權刪除此項目。');
+      }
+      if (onFailure) { onFailure(response); }
+    }
+  );
+}
+
+/**
+ * 依據 act 來顯示操作成功的訊息
+ *
+ * @param {string} act 
+ * @param {string} msg 
+ */
+function showSuccessMsg(act, msg) {
+  if (msg && msg.length > 0) {
+    alert(msg);
+  } else {
+    if (act === Globals.ACT_UPDATE) {
+      alert('修改成功');
+    } else if (act === Globals.ACT_CREATE) {
+      alert('新增成功');
+    } else if (act === Globals.ACT_DELETE) {
+      alert('刪除成功');
+    } else {
+      alert('操作成功');
+    }
+  }
+}
+
+/**
+ * 依據 act 來顯示操作錯誤的訊息
+ * 
+ * @param {string} act 
+ * @param {string} msg 
+ */
 function showFailureMsg(act, msg) {
   if (msg && msg.length > 0) {
     alert(msg);
@@ -68,7 +206,12 @@ function showFailureMsg(act, msg) {
 }
 
 export {
-  FetchWrapper,
-  ListArticles,
+  FetchGetWrapper,
+  GetRepository,
+  GetEntityById,
+  PostEntity,
+  PatchEntity,
+  DeleteEntity,
+  showSuccessMsg,
   showFailureMsg,
 };
