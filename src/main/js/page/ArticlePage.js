@@ -25,7 +25,7 @@ export default class ArticlePage extends React.Component {
     // 要顯示在列表的欄位
     this.columns = {
       id: ['ID', 'id'],
-      subject: ['主旨', 'subject'],
+      subject: ['標題', 'subject'],
       content: ['內文', 'content'],
       createdDate: ['資料建立日期', 'createdDate'],
       updatedDate: ['資料更新日期', 'updatedDate'],
@@ -117,6 +117,9 @@ export default class ArticlePage extends React.Component {
           <Route path={`${this.detailPath}/${Globals.ACT_CREATE}`} component={ArticleForm}/>
           <Route path={`${this.detailPath}/:itemId`} component={ArticleForm}/>
         </Switch>
+        <LinkContainer to={`${this.detailPath}/${Globals.ACT_CREATE}`}>
+          <Button>新增</Button>
+        </LinkContainer>
         <ItemList
           page={this.state.page}
           columns={this.columns}

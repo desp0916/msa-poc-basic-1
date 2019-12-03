@@ -17,7 +17,7 @@ export default function ModalDialog(props) {
   return (
     <Modal show={props.show} onHide={props.onHide}>
       <Modal.Header closeButton>
-        <Modal.Title>{props.title}zzzzz</Modal.Title>
+        <Modal.Title>{props.title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>{props.children}</Modal.Body>
       <Modal.Footer></Modal.Footer>

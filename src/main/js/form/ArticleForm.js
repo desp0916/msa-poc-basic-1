@@ -7,8 +7,9 @@
  */
 
 import React from 'react';
+import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, Form, FormControl, Modal } from 'react-bootstrap';
 import * as Globals from '../common/Globals';
 
 import { MetadataBlock } from '../common/MetadataBlock';
@@ -26,29 +27,42 @@ export default class ArticleForm extends React.Component {
       errors: {},
       isLoading: false,
       showDialog: true,
+      act: Globals.ACT_UPDATE,
     };
 
     this.repository = 'articles';
-    this.dialogTitles = {};
-    this.dialogTitles[Globals.ACT_CREATE] = '新增佈告';
-    this.dialogTitles[Globals.ACT_UPDATE] = '修改佈告';
     this.item = {};       // 暫存物件
     this.inputs = {};
     this.errors = {};
 
     this._handleSubmit = this._handleSubmit.bind(this);
     this._handleHide = this._handleHide.bind(this);
-    this._showErrors = this._showErrors.bind(this);
     this._handleSuccess = this._handleSuccess.bind(this);
+    this._showErrors = this._showErrors.bind(this);
+
+    this.subjectInput = React.createRef(); 
+    this.contentInput = React.createRef();
+    this._handleSubjectChange = this._handleSubjectChange.bind(this);
+    this._handleContentChange = this._handleContentChange.bind(this);
   }
 
-// //   UNSAFE_componentWillReceiveProps(nextProps) {
-// //     this.itemWillChange(nextProps.match.params.itemId);
-// //   }
+  _handleSubjectChange() {
+    this.setState(prevState => ({
+      item: {
+        ...prevState.item,
+        subject: this.subjectInput.current.value
+      }
+    }));
+  }
 
-// //   UNSAFE_componentDidMount() {
-// //     this.itemWillChange(this.props.match.params.itemId);
-// //   }
+  _handleContentChange() {
+    this.setState(prevState => ({
+      item: {
+        ...prevState.item,
+        content: this.contentInput.current.value
+      }
+    }));
+  }
 
   _handleHide() {
     this.setState({
@@ -58,31 +72,49 @@ export default class ArticleForm extends React.Component {
   }
 
   componentDidMount() {
-    this.itemWillChange(this.props.match.params.itemId);
+    this._getItem(this.props.match.params.itemId);
   }
 
-  itemWillChange(itemId) {
+  _getItem(itemId) {
+    if (itemId && itemId.toString().length > 0) {
+      this.setState({ isLoading: true, showDialog: false });
+      GetEntityById(this.repository, itemId,
+        (response) => {
+          this.setState({
+            item: response,
+            isLoading: false,
+            showDialog: true,
+            act: Globals.ACT_UPDATE, 
+          });
+        },
+        (response) => { alert('載入資料失敗'); }
+      );
+    } else {
       this.setState({
-        item: { startTime: this.now, endTime: this.now },
         isLoading: false,
-        showDialog: true
+        showDialog: true,
+        act: Globals.ACT_CREATE,
       });
+    }
   }
 
   _handleSubmit(e) {
     e.preventDefault();
+    console.log(this.state.item);
     this._clearErrors();
-    if (this.props.act === Globals.ACT_UPDATE) {
-    //   PatchEntity(this.state.item, this.inputs, this.repository, this._handleSuccess, this._showErrors);
-    } else if (this.props.match.params.itemId === Globals.ACT_CREATE) {
-    //   PostEntity(this.inputs, this.repository, this._handleSuccess, this._showErrors);
+    const inputs = {
+      subject: this.subjectInput.current.value,
+      content: this.contentInput.current.value
+    };
+    if (this.state.item && this.state.item._links && this.state.item._links.self && this.state.item._links.self.href.toString().length > 0) {
+      PatchEntity(this.repository, this.state.item, inputs, this._handleSuccess, this._showErrors);
     } else {
-      console.error('未知的操作');
+      PostEntity(this.repository, inputs, this._handleSuccess, this._showErrors);
     }
   }
 
   _handleSuccess(response) {
-    showSuccessMsg(this.props.act);
+    showSuccessMsg(this.state.act);
     // this.props.onRefreshList();
   }
 
@@ -99,42 +131,32 @@ export default class ArticleForm extends React.Component {
   }
 
   render() {
+    const dialogTitle = (this.state.act == Globals.ACT_CREATE) ? '新增文章' : '修改文章';
     return (
-      <ModalDialog title={this.dialogTitles[this.props.act]} show={this.state.showDialog} onHide={this._handleHide}>
+      <ModalDialog title={dialogTitle} show={this.state.showDialog} onHide={this._handleHide}>
         <Form onSubmit={this._handleSubmit}>
           <FormError error={this.state.errors.id} />
-          <FieldGroup id="subject" type="text" label="主旨 *" placeholder="請輸入主旨" 
-            defaultValue={this.state.item.subject} 
-            help={this.state.errors.subject} maxLength={150} />
-          <TextArea id="content" label="文章內容 *" placeholder="請輸入文章內容"
-            defaultValue={this.state.item.content} 
-            help={this.state.errors.content} maxLength={4096} />
+          <Form.Group controlId="subject">
+            <Form.Label>標題 *</Form.Label>
+            <FormControl ref={this.subjectInput} type="text" placeholder="請輸入標題" 
+              defaultValue={this.state.item.subject}
+              maxLength={150} onChange={() => this._handleSubjectChange()} />
+             {this.state.errors.subject && <Form.Control.Feedback>{this.state.errors.subject}</Form.Control.Feedback>}
+          </Form.Group>
+          <Form.Group controlId="content">
+            <Form.Label>文章內容 *</Form.Label>
+            <FormControl ref={this.contentInput} as="textarea" rows="5" placeholder="請輸入文章內容"
+              defaultValue={this.state.item.content}
+              maxLength={4096} onChange={() => this._handleContentChange()} />
+             {this.state.errors.content && <Form.Control.Feedback>{this.state.errors.content}</Form.Control.Feedback>}
+          </Form.Group>
           <MetadataBlock show={this.props.act === Globals.ACT_UPDATE} data={this.state.item} />
           <div style={Globals.STYLE_CENTER}>
             <Button onClick={this._handleHide}>取消</Button><Span/>
-            <Button variant="primary" type="submit">儲存</Button>
+            <Button type="submit">儲存</Button>
           </div>
         </Form>
       </ModalDialog>
     );
   }
 }
-
-
-
-    //   <ModalDialog title={this.dialogTitles[this.props.act]} show={this.state.showDialog} onHide={this._handleHide}>
-    //     <Form onSubmit={this._handleSubmit}>
-    //       <FormError error={this.state.errors.id} />
-    //       <FieldGroup id="subject" type="text" label="主旨 *" placeholder="請輸入主旨" 
-    //         defaultValue={this.state.item.subject} 
-    //         help={this.state.errors.subject} maxLength={150} />
-    //       <TextArea id="content" label="文章內容 *" placeholder="請輸入文章內容"
-    //         defaultValue={this.state.item.content} 
-    //         help={this.state.errors.content} maxLength={4096} />
-    //       <MetadataBlock show={this.props.act === Globals.ACT_UPDATE} data={this.state.item} />
-    //       <div style={Globals.STYLE_CENTER}>
-    //         <Button onClick={this._handleHide}>取消</Button><Span/>
-    //         <Button variant="primary" type="submit">儲存</Button>
-    //       </div>
-    //     </Form>
-    //   </ModalDialog>

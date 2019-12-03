@@ -74,15 +74,22 @@ function FieldGroup({ id, label, help, ...props }) {
  */
 function TextArea({ id, label, help, ...props }) {
   return (
-    <Form.Group
+    <FieldGroup
       id={id}
       label={label}
       as="textarea"
+      rows="5"
       help={help}
       {...props}
     />
   );
 }
+
+  {/* <Form.Group controlId={id}>
+    <Form.Label>{label}</Form.Label>
+    <Form.Control as="textarea" rows="10" />
+    {help && <Form.Control.Feedback>{help}</Form.Control.Feedback>}
+  </Form.Group> */}
 
 // TextArea.propTypes = {
 //   id: PropTypes.string,

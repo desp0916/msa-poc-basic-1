@@ -49,6 +49,19 @@ function GetRepository(repository, pageNumber, sort, onSuccess, onFailure) {
   const API_URI = `${Globals.API_ROOT}/${repository}/?size=${Globals.PAGE_SIZE}&number=${pageNumber}&sort=${sort.field},${sort.direction}`;
   const headers = new Headers({ 'Content-Type': 'application/json', 'Accept': 'application/hal+json' });
   FetchGetWrapper(API_URI, headers,  onSuccess, onFailure);
+
+  // fetch(API_URI, {
+  //   credentials: 'include',
+  //   method: 'GET',
+  //   mode: 'cors',
+  //   redirect: 'follow',
+  //   headers: headers
+  // })
+  // .then(response => response.json())
+  // .then(
+  //   response => { if (onSuccess) { onSuccess(response); }},
+  //   response => { if (onFailure) { onFailure(response); }}
+  // );
 }
 
 /**
@@ -61,6 +74,7 @@ function GetRepository(repository, pageNumber, sort, onSuccess, onFailure) {
  */
 function GetEntityById(repository, entityId, onSuccess, onFailure) {
   const API_URI = `${Globals.API_ROOT}/${repository}/${entityId}`;
+  const headers = new Headers({ 'Content-Type': 'application/json', 'Accept': 'application/hal+json' });
   FetchGetWrapper(API_URI, headers,  onSuccess, onFailure);
 }
 
@@ -73,14 +87,9 @@ function GetEntityById(repository, entityId, onSuccess, onFailure) {
  * @param {function} onFailure 
  */
 function PostEntity(repository, inputs, onSuccess, onFailure) {
-  let item = {};
-  Object.keys(inputs).map(key => {
-    if (typeof inputs[key].value !== 'undefined') {
-      item[key] = inputs[key].value.trim();
-    }
-  });
-  fetch(url, {
-    body: JSON.stringify(item),
+  const API_URI = `${Globals.API_ROOT}/${repository}/`;
+  fetch(API_URI, {
+    body: JSON.stringify(inputs),
     cache: 'no-cache',
     credentials: 'same-origin',
     headers: {
@@ -112,8 +121,8 @@ function PatchEntity(repository, entity, inputs, onSuccess, onFailure) {
       entity[key] = inputs[key].value.trim();
     }
   });
-  let url = entity._links.self.href;
-  fetch(url, {
+  let API_URI = entity._links.self.href;
+  fetch(API_URI, {
     body: JSON.stringify(entity),
     cache: 'no-cache',
     credentials: 'same-origin',
@@ -139,7 +148,8 @@ function PatchEntity(repository, entity, inputs, onSuccess, onFailure) {
  * @param {function} onFailure 
  */
 function DeleteEntity(entity, onSuccess, onFailure) {
-  fetch(entity._links.self.href, {
+  const API_URI = entity._links.self.href;
+  fetch(API_URI, {
     cache: 'no-cache',
     credentials: 'same-origin',
     headers: {

@@ -61,9 +61,9 @@ public class Article {
 	private Long id;
 
 	/**
-	 * 主旨
+	 * 標題
 	 */
-	@Description("主旨")
+	@Description("標題")
 	@NotNull(message = "article.subject.empty.Article.subject")
 	@Column(name = "subject", length = 150, nullable = false)
 	private String subject;
@@ -127,7 +127,7 @@ public class Article {
 	/**
 	 * 文章基本資料
 	 *
-	 * @param subject 主旨（不可為 NULL）
+	 * @param subject 標題（不可為 NULL）
 	 * @param content 文章內容 (最多 4096 個字元)（不可為 NULL）
 	 */
 	public Article(String subject, String content) {
