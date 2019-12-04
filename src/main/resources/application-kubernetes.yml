@@ -30,18 +30,18 @@ spring:
 # spring-cloud-kubernetes
 # https://cloud.spring.io/spring-cloud-kubernetes/reference/html/appendix.html
 # ----------------------------------------
-  cloud:
-    kubernetes:
-      discovery:
-        all-namespaces: true
-      reload:
-        enabled: true
-        mode: polling
-        period: 5000
-      config:
-        sources:
-          - name: other
-          - name: ${spring.application.name}
+#  cloud:
+#    kubernetes:
+#      discovery:
+#        all-namespaces: true
+#      reload:
+#        enabled: true
+#        mode: polling
+#        period: 5000
+#      config:
+#        sources:
+#          - name: other
+#          - name: ${spring.application.name}
 # ----------------------------------------
 # Logging
 # 使用「spring-boot-starter-logging」內建的 logback

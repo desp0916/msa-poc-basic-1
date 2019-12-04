@@ -33,15 +33,15 @@ server:
 # spring-cloud-kubernetes
 # https://cloud.spring.io/spring-cloud-kubernetes/reference/html/appendix.html
 # ----------------------------------------
-  cloud:
-    kubernetes:
-      discovery:
-        enabled: false
-      # 本機開發時，關閉此設定以免因抓不到 configMaps 而拋 exception
-      reload:
-        enabled: false
-      config:
-        enabled: false
+#  cloud:
+#    kubernetes:
+#      discovery:
+#        enabled: false
+#      # 本機開發時，關閉此設定以免因抓不到 configMaps 而拋 exception
+#      reload:
+#        enabled: false
+#      config:
+#        enabled: false
 
 # ----------------------------------------
 # Logging
