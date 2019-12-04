@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  labels:
+    app: postgres
+data:
+  POSTGRES_DB: msa_poc
+  POSTGRES_USER: msa_poc_mgr
+  POSTGRES_PASSWORD: test123

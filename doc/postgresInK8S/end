@@ -1,0 +1,6 @@
+NAME                  ENDPOINTS            AGE
+kubernetes            192.168.64.17:8443   4d16h
+msa-poc-basic-1       172.17.0.10:8080     95m
+postgres              172.17.0.9:5432      22m
+postgresql96          192.168.64.1:5432    4d16h
+spring-cloud-reload   <none>               120m

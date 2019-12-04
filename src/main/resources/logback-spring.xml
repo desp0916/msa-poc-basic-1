@@ -34,7 +34,7 @@
 	<!-- include resource="org/springframework/boot/logging/logback/base.xml" / -->
 
 	<!-- 開發環境（通常在本機 IDE）：將 Log 顯示在 CONSOLE -->
-	<springProfile name="local">
+	<springProfile name="local,kubernetes">
 		<include resource="org/springframework/boot/logging/logback/console-appender.xml" />
 		<root level="INFO">
 			<appender-ref ref="CONSOLE" />
