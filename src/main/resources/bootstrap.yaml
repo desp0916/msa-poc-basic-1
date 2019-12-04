@@ -16,22 +16,22 @@ spring:
 # https://cloud.spring.io/spring-cloud-kubernetes/reference/html/appendix.html
 # ----------------------------------------
 # 本機開發時，關閉以下設定以免因抓不到 configMaps 而拋 exception
-  cloud:
-    kubernetes:
-      discovery:
-        enabled: false
-      reload:
-        enabled: false
-      config:
-        enabled: false
-# 部署至 K8S 前，可使用以下設定
 #  cloud:
 #    kubernetes:
+#      discovery:
+#        enabled: false
 #      reload:
-#        enabled: true
-#        mode: polling
-#        period: 5000
+#        enabled: false
 #      config:
-#        sources:
-#          - name: other
-#          - name: ${spring.application.name}
+#        enabled: false
+# 部署至 K8S 前，可使用以下設定
+  cloud:
+    kubernetes:
+      reload:
+        enabled: true
+        mode: polling
+        period: 5000
+      config:
+        sources:
+          - name: other
+          - name: ${spring.application.name}

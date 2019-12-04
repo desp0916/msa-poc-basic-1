@@ -10,7 +10,7 @@ spring:
     name: msa-poc-basic-1
   profiles:
     # 使用 mvn fabric8:deploy 部署到 K8S 時，會被 src/main/fabric8/deployment.yml
-    # 裡面的「SPRING_PROFILES_ACTIVE」環境變數取代（目前設為 minikube）
+    # 裡面的「SPRING_PROFILES_ACTIVE」環境變數取代（目前設為 kubernetes）
     active: local
   data:
     rest:
@@ -26,3 +26,16 @@ spring:
     cache: false
     mode: HTML
     prefix: classpath:/templates/
+
+# ----------------------------------------
+# Actuator 的 endpoints
+# https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html#production-ready-endpoints
+# ----------------------------------------
+management:
+  endpoint:
+    restart:
+      enabled: true
+    health:
+      enabled: true
+    info:
+      enabled: true
