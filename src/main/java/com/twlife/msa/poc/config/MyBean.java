@@ -29,7 +29,7 @@ public class MyBean {
 		log.info("The first message is: " + this.k8S1Config.getMessage());
 
 		System.out.println("The other property is: " + this.k8S2Config.getProperty());
-		log.info("The other message is: " + this.k8S2Config.getProperty());
+		log.info("The other property is: " + this.k8S2Config.getProperty());
 	}
 
 }
