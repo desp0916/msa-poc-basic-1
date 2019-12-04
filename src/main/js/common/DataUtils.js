@@ -40,13 +40,13 @@ function FetchGetWrapper(url, headers, onSuccess, onFailure) {
 /**
  * 取得多筆資料（repository）
  * 
- * @param {number} pageNumber
+ * @param {number} pageNo
  * @param {object} sort
  * @param {function} onSuccess 
  * @param {function} onFailure 
  */
-function GetRepository(repository, pageNumber, sort, onSuccess, onFailure) {
-  const API_URI = `${Globals.API_ROOT}/${repository}/?size=${Globals.PAGE_SIZE}&number=${pageNumber}&sort=${sort.field},${sort.direction}`;
+function GetRepository(repository, pageNo, sort, onSuccess, onFailure) {
+  const API_URI = `${Globals.API_ROOT}/${repository}/?size=${Globals.PAGE_SIZE}&page=${pageNo}&sort=${sort.field},${sort.direction}`;
   const headers = new Headers({ 'Content-Type': 'application/json', 'Accept': 'application/hal+json' });
   FetchGetWrapper(API_URI, headers,  onSuccess, onFailure);
 

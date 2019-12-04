@@ -36,9 +36,12 @@ export default class Container extends Component {
   }
 
   render() {
+    const containerStyle = {
+      padding: '20px',
+    };
     return (
       <Router>
-        <div>
+        <div style={containerStyle}>
           <Route exact path="/" component={ArticlePage}/>
           <Route path="/Article" component={ArticlePage}/>
         </div>

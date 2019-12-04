@@ -17,7 +17,7 @@ const ACT_DELETE = 'delete';
 const ACT_QUERY = 'query';
 const ACT_VIEW = 'view';
 const ACT_OTHER = 'other';
-const STYLE_CENTER = {textAlign: 'center'};
+const STYLE_CENTER = {textAlign: 'right', margin: '0px auto'};
 const LOADABLE_TIMEOUT = 10000; // https://github.com/jamiebuilds/react-loadable
 
 export {

@@ -13,6 +13,7 @@ import { Route, Switch } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Button } from 'react-bootstrap';
 import * as Globals from '../common/Globals';
+import { Span } from '../common/FormObjects';
 import { GetRepository, DeleteEntity, showSuccessMsg, showFailureMsg } from '../common/DataUtils';
 import { Sort, ItemList, ItemRow } from '../common/ItemList';
 import ArticleForm from '../form/ArticleForm';
@@ -43,6 +44,7 @@ export default class ArticlePage extends React.Component {
     this.detailColumn = 'subject';
     this.detailPath = '/Article/ArticleForm';
 
+    this._handleSearch = this._handleSearch.bind(this);
     this._handleRefreshList = this._handleRefreshList.bind(this);
     this._handleDelete = this._handleDelete.bind(this);
   }
@@ -59,11 +61,13 @@ export default class ArticlePage extends React.Component {
   }
 
   _handleSearch(pageNo = 0, sort = this.state.sort) {
+
     GetRepository(this.repository, pageNo, sort,
       (response) => {
         this.setState({
           items: response._embedded[this.repository],
           page: response.page,
+          sort: sort,
         });
       },
       this._showErrors);
@@ -88,9 +92,10 @@ export default class ArticlePage extends React.Component {
          detailColumn={this.detailColumn} detailPath={this.detailPath}
           buttons={[
             <LinkContainer key={item.id+'button'} to={`${this.detailPath}/${item.id}`}>
-              <Button key={item.id+'_edit'} variant="link">修改</Button>
+              <Button key={item.id+'_edit'} variant="outline-secondary">修改</Button>
             </LinkContainer>,
-            <Button key={item.id+'_delete'} onClick={() => this._handleDelete(item)} variant="link">刪除</Button>
+            <Span key={item.id+'span'}/>,
+            <Button key={item.id+'_delete'} onClick={() => this._handleDelete(item)} variant="outline-secondary">刪除</Button>
           ]}
         />
       ) : null;
@@ -111,15 +116,20 @@ export default class ArticlePage extends React.Component {
   }
 
   render() {
+    const navStyle = {
+      textAlign: 'right',
+    };
     return (
       <div>
         <Switch>
           <Route path={`${this.detailPath}/${Globals.ACT_CREATE}`} component={ArticleForm}/>
           <Route path={`${this.detailPath}/:itemId`} component={ArticleForm}/>
         </Switch>
-        <LinkContainer to={`${this.detailPath}/${Globals.ACT_CREATE}`}>
-          <Button>新增</Button>
-        </LinkContainer>
+        <div style={navStyle}>
+          <LinkContainer to={`${this.detailPath}/${Globals.ACT_CREATE}`}>
+            <Button variant="outline-secondary">新增</Button>
+          </LinkContainer>
+        </div>
         <ItemList
           page={this.state.page}
           columns={this.columns}
