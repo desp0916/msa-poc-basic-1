@@ -2,7 +2,7 @@
 
 ## 1. docker run
 
-### 1.1
+### 1.1 執行
 
 ``` bash
 docker run \
@@ -20,7 +20,7 @@ docker run \
   jenkinsci/blueocean
 ```
 
-### 1.2
+### 1.2 取得 Docker Host IP
 
 ``` bash
 route | awk '/^default/ { print $2 }'
@@ -28,9 +28,12 @@ route | awk '/^default/ { print $2 }'
 
 ## 2. docker-compose
 
-### 2.1 
+### 2.1 步驟
 
-[Accessing host machine from within docker container](https://forums.docker.com/t/accessing-host-machine-from-within-docker-container/14248/4)
+參考：
+
+  1. [Accessing host machine from within docker container](https://forums.docker.com/t/accessing-host-machine-from-within-docker-container/14248/4)
+  2. [建置 Jenkins 分散式架構 ( Master+Slave )](https://tpu.thinkpower.com.tw/tpu/articleDetails/873)
 
 ``` bash
 # 1. 建立相關目錄

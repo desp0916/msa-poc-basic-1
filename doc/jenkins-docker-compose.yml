@@ -34,10 +34,11 @@ services:
     user: root
     volumes:
       - $HOME/tmp/docker/jnlp_agent_docker:/home/jenkins
+      - $HOME/tmp/docker/jenkins_master:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - JENKINS_URL=http://jenkins-master:8080
-      - JENKINS_SECRET=601d53e83b729085a6f3e48be3fdc20b20ab8c2a1199e44ac337834ce2647327
+      - JENKINS_SECRET=0324c738f5215695d144dff21d4f3fec3892e69c12ccf75ef6e12b43b6ffab5a
       - JENKINS_AGENT_NAME=jnlp_agent_docker
       - JENKINS_AGENT_WORKDIR=/home/jenkins
       - TZ=Asia/Taipei
@@ -54,11 +55,12 @@ services:
     user: root
     volumes:
       - $HOME/tmp/docker/jnlp_agent_maven:/home/jenkins
+      - $HOME/tmp/docker/jenkins_master:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
       - $HOME/.m2:/root/.m2
     environment:
       - JENKINS_URL=http://jenkins-master:8080
-      - JENKINS_SECRET=279ab3dc3ea89b492b2e35d3a5a2aa1cdb20ec91015e4aeaafb369347086a7a6
+      - JENKINS_SECRET=411d973907df567aeaddf265d00fe05fb9bef7d8da6a517548e6c8350cacebc7
       - JENKINS_AGENT_NAME=jnlp_agent_maven
       - JENKINS_AGENT_WORKDIR=/home/jenkins
       - TZ=Asia/Taipei

@@ -25,11 +25,11 @@ spring:
        discovery:
          all-namespaces: true
        reload:
-         enabled: false
+         enabled: true
          mode: polling
          period: 5000
        config:
-         enabled: false
+         enabled: true
          sources:
            - name: other
            - name: ${spring.application.name}
