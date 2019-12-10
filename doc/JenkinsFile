@@ -1,7 +1,7 @@
 pipeline {
     agent none
     environment {
-        registry = "desp0916/microservices-demo"
+        registry = "desp0916/msa-poc-basic-1.git"
         registryCredential = 'DockerHub-desp0916'
         dockerImage = ''
     }
@@ -10,7 +10,7 @@ pipeline {
             agent {
                 docker {
                     label 'docker'
-                    image 'maven:3-alpine'
+                    image 'maven:3.6.3-jdk-8'
                     args '-v /root/.m2:/root/.m2'
                 }
             }
@@ -23,7 +23,7 @@ pipeline {
             agent {
                 docker {
                     label 'docker'
-                    image 'maven:3-alpine'
+                    image 'maven:3.6.3-jdk-8'
                     args '-v /root/.m2:/root/.m2'
                 }
             }
@@ -32,27 +32,51 @@ pipeline {
             }
         }
         stage('Building docker image') {
-            agent { node { label 'docker' } }
-            steps {
-                script {
-                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
+            agent {
+                docker {
+                    label 'docker'
+                    image 'maven:3.6.3-jdk-8'
+                    args '-v /root/.m2:/root/.m2'
                 }
+            }
+            steps {
+                sh 'mvn -B -DskipTests clean package'
             }
         }
         stage('Push docker image') {
-            agent { node { label 'docker' } }
-            steps {
-                script {
-                    docker.withRegistry( '', registryCredential) {
-                        dockerImage.push()
-                    }
+            agent {
+                docker {
+                    label 'docker'
+                    image 'maven:3.6.3-jdk-8'
+                    args '-v /root/.m2:/root/.m2'
                 }
             }
-        }
-        stage('Remove Unused docker image') {
-            agent { node { label 'docker' } }
             steps {
-                sh "docker rmi $registry:$BUILD_NUMBER"
+                sh 'mvn fabric8:build'
+            }
+        }
+        stage('Generate K8S resources') {
+            agent {
+                docker {
+                    label 'docker'
+                    image 'maven:3.6.3-jdk-8'
+                    args '-v /root/.m2:/root/.m2'
+                }
+            }
+            steps {
+                sh 'mvn fabric8:resource'
+            }
+        }
+        stage('Deploy to K8S') {
+            agent {
+                docker {
+                    label 'docker'
+                    image 'maven:3.6.3-jdk-8'
+                    args '-v /root/.m2:/root/.m2'
+                }
+            }
+            steps {
+                sh 'mvn fabric8:deploy'
             }
         }
     }
