@@ -36,6 +36,7 @@ services:
       - $HOME/tmp/docker/jnlp_agent_docker:/home/jenkins
       - $HOME/tmp/docker/jenkins_master:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
+      - $HOME/.m2:/root/.m2
     environment:
       - JENKINS_URL=http://jenkins-master:8080
       - JENKINS_SECRET=0324c738f5215695d144dff21d4f3fec3892e69c12ccf75ef6e12b43b6ffab5a
