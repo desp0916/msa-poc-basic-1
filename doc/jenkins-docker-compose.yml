@@ -1,0 +1,72 @@
+# 1. 建立相關目錄
+#    mkdir -p "$HOME"/tmp/docker/{jenkins_master,jnlp_agent_docker,jnlp_agent_maven}
+# 2. 建立網路，以便讓 container 可以連至 docker host
+#    docker network create -d bridge --subnet 192.168.0.0/24 --gateway 192.168.0.1 dockernet
+# 3. 執行 docker-compose
+#    docker-compose -f jenkins-docker-compose.yml up
+version: '2'
+
+services:
+  # https://hub.docker.com/r/jenkins/jenkins
+  jenkins-master:
+    restart: always
+    #image: jenkins/jenkins:lts
+    image: jenkinsci/blueocean
+    container_name: jenkins-master
+    user: root
+    ports:
+      - "28080:8080"
+      - "50000:50000"
+    volumes:
+      - $HOME/tmp/docker/jenkins_master:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - $HOME/.m2:/root/.m2
+    environment:
+      - TZ=Asia/Taipei
+    networks:
+      - dockernet
+
+  # https://hub.docker.com/r/jenkins/jnlp-agent-dokcer
+  jnlp-agent-docker:
+    restart: always
+    image: jenkins/jnlp-agent-docker
+    container_name: jnlp-agent-docker
+    user: root
+    volumes:
+      - $HOME/tmp/docker/jnlp_agent_docker:/home/jenkins
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - JENKINS_URL=http://jenkins-master:8080
+      - JENKINS_SECRET=601d53e83b729085a6f3e48be3fdc20b20ab8c2a1199e44ac337834ce2647327
+      - JENKINS_AGENT_NAME=jnlp_agent_docker
+      - JENKINS_AGENT_WORKDIR=/home/jenkins
+      - TZ=Asia/Taipei
+    depends_on:
+      - jenkins-master
+    networks:
+      - dockernet
+
+  # https://hub.docker.com/r/jenkins/jnlp-agent-maven
+  jnlp-agent-maven:
+    restart: always
+    image: jenkins/jnlp-agent-maven
+    container_name: jnlp-agent-maven
+    user: root
+    volumes:
+      - $HOME/tmp/docker/jnlp_agent_maven:/home/jenkins
+      - /var/run/docker.sock:/var/run/docker.sock
+      - $HOME/.m2:/root/.m2
+    environment:
+      - JENKINS_URL=http://jenkins-master:8080
+      - JENKINS_SECRET=279ab3dc3ea89b492b2e35d3a5a2aa1cdb20ec91015e4aeaafb369347086a7a6
+      - JENKINS_AGENT_NAME=jnlp_agent_maven
+      - JENKINS_AGENT_WORKDIR=/home/jenkins
+      - TZ=Asia/Taipei
+    depends_on:
+      - jenkins-master
+    networks:
+      - dockernet
+
+networks:
+  dockernet:
+    external: true

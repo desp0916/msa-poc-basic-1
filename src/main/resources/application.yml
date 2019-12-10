@@ -26,7 +26,6 @@ spring:
     cache: false
     mode: HTML
     prefix: classpath:/templates/
-
 # ----------------------------------------
 # Actuator 的 endpoints
 # https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html#production-ready-endpoints
@@ -39,3 +38,15 @@ management:
       enabled: true
     info:
       enabled: true
+
+# ----------------------------------------
+# https://www.baeldung.com/spring-boot-custom-error-page
+# ----------------------------------------
+server:
+  error:
+    whitelabel:
+      enabled: false
+
+#spring:
+#  autoconfigure:
+#    exclude: org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration

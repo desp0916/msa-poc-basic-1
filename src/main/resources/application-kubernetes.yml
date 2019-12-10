@@ -11,8 +11,8 @@ spring:
     # https://stackoverflow.com/questions/35531661
     # url: jdbc:postgresql://postgresql96:5432/msa_poc
     url: jdbc:postgresql://${K8S_POSTGRES_DB_HOST}:${K8S_POSTGRES_DB_PORT}/msa_poc
-    username: ${K8S_POSTGRES_DB_USERNAME:msa_poc_mgr}
-    password: ${K8S_POSTGRES_DB_PASSWORD:test123}
+    username: ${K8S_POSTGRES_DB_USERNAME}
+    password: ${K8S_POSTGRES_DB_PASSWORD}
     validationQuery: SELECT 1
 # Workaround for docker-compose startup order problems.
 # docker-compose will attempt to start spanners-api before the database
