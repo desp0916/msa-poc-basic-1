@@ -15,7 +15,7 @@ spec:
           - name: SPRING_PROFILES_ACTIVE
             value: "kubernetes"
           - name: K8S_POSTGRES_DB_HOST
-            value: "postgres"
+            value: "postgres96"
           - name: K8S_POSTGRES_DB_PORT
             value: "5432"
           # https://developers.redhat.com/blog/2017/10/04/configuring-spring-boot-kubernetes-secrets/
