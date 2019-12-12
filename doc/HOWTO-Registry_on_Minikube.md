@@ -4,6 +4,7 @@
 ## 1. Use localhost:5000 as the registry
 
 [Sharing a local registry with minikube](https://blog.hasura.io/sharing-a-local-registry-for-minikube-37c7240d0615/)
+[Docker Hub - solsson/kube-registry-proxy](https://hub.docker.com/r/solsson/kube-registry-proxy/)
 
 ``` bash
 # 1. Create a registry on minikube

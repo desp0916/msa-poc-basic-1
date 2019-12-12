@@ -52,7 +52,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'mvn fabric8:build -Ddocker.push.registry=192.168.0.1:5000/poc/msa-poc-basic-1 -Ddocker.username=gary'
+                sh 'mvn fabric8:build -Ddocker.push.registry=192.168.0.1:5000/poc/msa-poc-basic-1'
             }
         }
         stage('Push Docker image') {
@@ -64,7 +64,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'mvn fabric8:push -Ddocker.push.registry=192.168.0.1:5000/poc/msa-poc-basic-1 -Ddocker.username=gary'
+                sh 'mvn fabric8:push -Ddocker.push.registry=192.168.0.1:5000/poc/msa-poc-basic-1'
             }
         }
         stage('Generate K8S resources') {
@@ -88,7 +88,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'mvn fabric8:resource-apply -Ddocker.pull.registry=kube-registry.kube-system:5000/poc/msa-poc-basic-1'
+                sh 'mvn fabric8:resource-apply -Ddocker.pull.registry=localhost:5000/poc/msa-poc-basic-1'
             }
         }
     }
