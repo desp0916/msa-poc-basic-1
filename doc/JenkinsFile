@@ -88,7 +88,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'mvn fabric8:deploy -DskipTests -Ddocker.pull.registry=kube-registry:5000/poc/msa-poc-basic-1'
+                sh 'mvn fabric8:resource-apply -Ddocker.pull.registry=kube-registry.kube-system:5000/poc/msa-poc-basic-1'
             }
         }
     }
