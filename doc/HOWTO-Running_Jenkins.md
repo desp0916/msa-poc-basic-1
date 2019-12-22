@@ -36,7 +36,7 @@ route | awk '/^default/ { print $2 }'
   2. [建置 Jenkins 分散式架構 ( Master+Slave )](https://tpu.thinkpower.com.tw/tpu/articleDetails/873)
 
 ``` bash
-# 0. 該終端機視窗不要執行 eval $(minikube docker-env)！
+# 0. 注意：在終端機視窗中不要執行 eval $(minikube docker-env)!!!!
 # 1. 建立相關目錄
 mkdir -p "$HOME"/tmp/docker/{jenkins_master,jnlp_agent_docker,jnlp_agent_maven}
 # 2. 建立網路，以便讓 container 可以連至 docker host

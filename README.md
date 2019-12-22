@@ -9,7 +9,7 @@
  3. minikube 1.5.2 (包含 kubectl)
  4. OpenJDK 64-Bit Server VM (Zulu 8.20.0.5-macosx) (build 25.121-b15, mixed mode)
  5. Apache Maven 3.6.1
- 6. spring-cloud-kubernetes 1.1.0.RC2（定義在 `pom.xml` 中，不需另外安裝）
+ 6. spring-cloud-kubernetes 1.1.0.RC2（定義在 `pom.xml` 中，透過 Maven 下載安裝）
  7. fabric8-maven-plugin 4.3.1（定義在 `pom.xml` 中，不需另外安裝）
 
 ## 2. 前置作業
@@ -111,25 +111,43 @@ Temporary Error: unexpected response code: 503
 kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:default
 ```
 
-## 7. 參考：
+## 7. 本機開發或執行
 
-### 7.1 spring-cloud-kubernetes
+請先將 `src/resources/bootstrap.yaml` 以下兩項設為 `false`，以避免因抓不到 configMaps 而拋出 
+`io.fabric8.kubernetes.client.KubernetesClientException`：
+
+``` bash
+cloud.kubernetes.reload.enabled: false
+cloud.kubernetes.config.enabled: false
+```
+
+若要在本機打包執行，請在專案根目錄執行以下指令：
+
+``` bash
+mvn clean package -DskipTests
+java -jar target/msa-poc-basic-1-0.0.1-SNAPSHOT.jar
+```
+
+## 8. 參考：
+
+### 8.1 spring-cloud-kubernetes
 
   1. [GitHub](https://github.com/spring-cloud/spring-cloud-kubernetes)
   2. [文件](https://cloud.spring.io/spring-cloud-static/spring-cloud-kubernetes/1.1.0.RC2/reference/html/)
 
-### 7.2 fabric8-maven-plugin
+### 8.2 fabric8-maven-plugin
 
   1. [GitHub](https://github.com/fabric8io/fabric8-maven-plugin)
   2. [文件](https://maven.fabric8.io/)
 
-### 7.3 其他
+### 8.3 其他
 
   1. [Baeldung - Guide to Spring Cloud Kubernetes](https://www.baeldung.com/spring-cloud-kubernetes)
   2. [Spring - Spring Boot with Docker](https://spring.io/guides/gs/spring-boot-docker/)
   3. [Spring - Topical Guide on Docker](https://spring.io/guides/topicals/spring-boot-docker/)
   4. [Red Hat Developer - Configuring Spring Boot on Kubernetes with Secrets](https://developers.redhat.com/blog/2017/10/04/configuring-spring-boot-kubernetes-secrets/)
   5. [TechBridge 技術共筆部落格 - Kubernetes 與 minikube 入門教學](https://blog.techbridge.cc/2018/12/01/kubernetes101-introduction-tutorial/)
+  6. [Spring Boot 静态资源处理](https://blog.csdn.net/isea533/article/details/50412212)
 
 ## 附錄 A. Build Docker Image
 
